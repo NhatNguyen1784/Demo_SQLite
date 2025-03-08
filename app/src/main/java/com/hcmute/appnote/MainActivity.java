@@ -1,6 +1,8 @@
 package com.hcmute.appnote;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -44,11 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
         anhxa();
         initDatabaseSqlite();
-        insertData();
-        getData();
-
+        //insertData();
         noteAdapter = new NoteAdapter(this, listNotes);
         rvNotes.setAdapter(noteAdapter);
+        getData();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvNotes.setLayoutManager(linearLayoutManager);
 
@@ -74,15 +76,18 @@ public class MainActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_add_note);
 
         // anh xa cac item tren dialog
+        TextView txtTitle = (TextView) dialog.findViewById(R.id.txtTitle);
         EditText edtNameNote = (EditText) dialog.findViewById(R.id.edtNoteName);
-        Button btnEdit = (Button) dialog.findViewById(R.id.btnEdit);
+        Button btnSave = (Button) dialog.findViewById(R.id.btnSave);
         Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+
+        txtTitle.setText("Add Note");
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         // set su kien khi bam nut Edit va Cancel
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String nameNote = edtNameNote.getText().toString();
@@ -96,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // goi ham de refresh data
                     getData();
-                    noteAdapter.notifyDataSetChanged();
+//                    noteAdapter.notifyDataSetChanged();
                 }
 
             }
@@ -110,6 +115,66 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void DialogEdit(Integer id, String nameNote){
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_add_note);
+
+        // anh xa cac item tren dialog
+        TextView txtTitle = (TextView) dialog.findViewById(R.id.txtTitle);
+        EditText edtNameNote = (EditText) dialog.findViewById(R.id.edtNoteName);
+        Button btnSave = (Button) dialog.findViewById(R.id.btnSave);
+        Button btnCancel = (Button) dialog.findViewById(R.id.btnCancel);
+
+        txtTitle.setText("Edit Note");
+        edtNameNote.setText(nameNote);
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                databaseHandler.queryData("UPDATE Notes SET NameNotes = '" + nameNote + "' WHERE Id = '" + id +"')");
+                Toast.makeText(MainActivity.this, "Edit note successfully", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+
+                // goi ham de refresh data
+                getData();
+//                noteAdapter.notifyDataSetChanged();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    public void DialogDelete(Integer id, String name){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure want to delete Note " + name + "?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                databaseHandler.queryData("DELETE FROM Notes WHERE Id = '" + id +"'");
+                Toast.makeText(MainActivity.this, "Delete note successfully", Toast.LENGTH_LONG).show();
+                getData();
+//                noteAdapter.notifyDataSetChanged();
+//                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.show();
+    }
+
     // Tao bang
     private void initDatabaseSqlite(){
         databaseHandler = new DatabaseHandler(this, "note.sqlite", null, 1);
@@ -121,13 +186,11 @@ public class MainActivity extends AppCompatActivity {
         databaseHandler.queryData("INSERT INTO Notes (NameNotes) VALUES ('Lau Nha Met')");
         databaseHandler.queryData("INSERT INTO Notes (NameNotes) VALUES ('Rua Bat')");
         databaseHandler.queryData("INSERT INTO Notes (NameNotes) VALUES ('Giat Do')");
-        databaseHandler.queryData("INSERT INTO Notes (NameNotes) VALUES ('Truc Sinh')");
-        databaseHandler.queryData("INSERT INTO Notes (NameNotes) VALUES ('Truc Sinh')");
-        databaseHandler.queryData("INSERT INTO Notes (NameNotes) VALUES ('Truc Sinh')");
     }
 
     // lay data tu bang
     private void getData(){
+        listNotes.clear();
         String name;
         Integer id;
         Cursor cursor = databaseHandler.getData("SELECT * FROM Notes");
@@ -138,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             // add vao list note de dua vao adapter
             listNotes.add(new Note(id, name));
         }
-        //noteAdapter.notifyDataSetChanged();
+        noteAdapter.notifyDataSetChanged();
     }
 
     private void anhxa(){

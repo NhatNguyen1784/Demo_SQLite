@@ -4,23 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@android:color/white"
+    android:elevation="4dp">
 
     <TextView
         android:id="@+id/txtNoteName"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="Tên ghi chú"
-        android:textSize="16sp"
-        android:gravity="start"
-        android:padding="8dp"/>
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:textColor="@android:color/black" />
 
-    <Button
-        android:id="@+id/buttonEdit"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:gravity="end"
-        android:text="Chỉnh sửa" />
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp">
+
+        <ImageView
+            android:id="@+id/imgEdit"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_edit"
+            android:contentDescription="Chỉnh sửa"/>
+
+        <ImageView
+            android:id="@+id/imgDelete"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Xóa"/>
+    </LinearLayout>
 </LinearLayout>
