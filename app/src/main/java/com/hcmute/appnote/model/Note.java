@@ -1,4 +1,4 @@
-package com.hcmute.appnote;
+package com.hcmute.appnote.model;
 
 import java.io.Serializable;
 

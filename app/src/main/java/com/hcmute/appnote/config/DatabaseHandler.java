@@ -1,4 +1,4 @@
-package com.hcmute.appnote;
+package com.hcmute.appnote.config;
 
 import android.content.Context;
 import android.database.Cursor;

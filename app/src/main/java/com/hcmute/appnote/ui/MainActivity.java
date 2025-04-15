@@ -1,4 +1,4 @@
-package com.hcmute.appnote;
+package com.hcmute.appnote.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -24,6 +24,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.hcmute.appnote.config.DatabaseHandler;
+import com.hcmute.appnote.R;
+import com.hcmute.appnote.adapter.NoteAdapter;
+import com.hcmute.appnote.model.Note;
 
 import java.util.ArrayList;
 

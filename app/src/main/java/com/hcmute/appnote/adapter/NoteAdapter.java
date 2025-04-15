@@ -1,6 +1,5 @@
-package com.hcmute.appnote;
+package com.hcmute.appnote.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.hcmute.appnote.ui.MainActivity;
+import com.hcmute.appnote.R;
+import com.hcmute.appnote.model.Note;
 
 import java.util.ArrayList;
 
@@ -59,7 +62,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         return listNotes.size();
     }
 
-    protected class NoteViewHolder extends RecyclerView.ViewHolder{
+    public class NoteViewHolder extends RecyclerView.ViewHolder{
         private TextView txtNameNote;
         private ImageView imgEdit;
         private ImageView imgDelete;
